@@ -1,0 +1,18 @@
+==========================
+BinarFud
+==========================
+Terima kasih sudah memesan
+di BinarFud
+
+Dibawah ini adalah pesanan anda
+Nasi + Ayam      6     108000
+Es Teh Manis     9      27000
+-----------------------------------+
+Total           15     135000
+
+Pembayaran : BinarCash
+
+==========================
+Simpan struk ini sebagai
+bukti pembayaran
+==========================
