@@ -1,0 +1,17 @@
+==============================
+BinarFud
+==============================
+Terima kasih sudah memesan
+di BinarFud
+
+Dibawah ini adalah pesanan anda
+Nasi Goreng      8     120000
+Es Jeruk         8      40000
+------------------------------
+Total           16     160000
+Pembayaran : BinarCash
+
+==============================
+Simpan struk ini sebagai
+bukti pembayaran
+==============================
