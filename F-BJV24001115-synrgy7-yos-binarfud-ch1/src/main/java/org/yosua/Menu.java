@@ -3,11 +3,10 @@ package org.yosua;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class Menu {
-    private List<Food> menu = new ArrayList<>();
-    private HashMap<Integer, Integer> pesanan = new HashMap<>();
+    private final List<Food> menu = new ArrayList<>();
+    private final HashMap<Integer, Integer> pesanan = new HashMap<>();
     public Menu() {
         initMenu();
     }
@@ -28,20 +27,9 @@ public class Menu {
         return pesanan;
     }
 
-    public void addFood(Food food) {
-        menu.add(food);
-    }
-
-    public void removeFood(int idFood) {
-        menu.removeIf(food -> food.getId() == idFood);
-    }
-
-    public void removeFood(Food food) {
-        menu.remove(food);
-    }
-
     public Food getFoodById(int id) {
         return menu.stream().filter(food -> food.getId() == id).findFirst().orElse(null);
     }
+
 
 }
