@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.model.User;
+import org.example.model.dto.AddUserRequest;
 import org.example.repository.interfaces.UserRepository;
 import org.example.repository.UserRepositoryImpl;
 import org.example.service.interfaces.UserService;
@@ -26,8 +27,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean add(User user) {
-        return userRepository.add(user);
+    public boolean add(AddUserRequest addUserRequest) {
+        boolean isExistByUsername = userRepository.getAll().stream()
+                .anyMatch(u -> u.getUsername().equals(addUserRequest.getUsername()));
+
+        boolean isExistByEmail = userRepository.getAll().stream()
+                .anyMatch(u -> u.getEmail().equals(addUserRequest.getEmail()));
+
+        if (isExistByUsername || isExistByEmail) {
+            return false;
+        }
+        return userRepository.add(addUserRequest);
     }
 
     @Override

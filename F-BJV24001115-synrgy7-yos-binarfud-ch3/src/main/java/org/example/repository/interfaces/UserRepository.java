@@ -1,12 +1,18 @@
 package org.example.repository.interfaces;
 
 import org.example.model.User;
+import org.example.model.dto.AddUserRequest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
-    boolean add(User user);
+    boolean add(AddUserRequest addUserRequest);
     List<User> getAll();
-    void deleteById(UUID uuid);
+    boolean deleteById(UUID uuid);
+    Optional<User> getById(UUID uuid);
+    boolean isExistByID(UUID uuid);
+    boolean isExistByEmail(String email);
+    boolean isExistByUserName(String userName);
 }

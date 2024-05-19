@@ -1,0 +1,19 @@
+
+ƒ
+java:S1450"aRemove the "orderDetailService" field and declare it as a local variable in the relevant methods.(™€ü¤üÿÿÿÿ8ãØáù1
+}
+java:S1450"[Remove the "orderService" field and declare it as a local variable in the relevant methods.(ãë»ìÿÿÿÿÿ8ãØáù1
+|
+java:S1450"ZRemove the "userService" field and declare it as a local variable in the relevant methods.(¶òÁÈùÿÿÿÿ8ãØáù1
+X	java:S125"<This block of commented-out lines of code should be removed.(ÿñÉ÷8åØáù1
+W
+java:S1854":Remove this useless assignment to local variable "choice".(ê¸·ß8æØáù1
+H
+java:S1481"+Remove this unused "choice" local variable.(ê¸·ß8ìØáù1
+X	java:S125"<This block of commented-out lines of code should be removed.(ˆı™ñ8ìØáù1
+Q
+java:S1068"/Remove this unused "userService" private field.(¶òÁÈùÿÿÿÿ8îØáù1
+R
+java:S1068"0Remove this unused "orderService" private field.(ãë»ìÿÿÿÿÿ8îØáù1
+X
+java:S1068"6Remove this unused "orderDetailService" private field.(™€ü¤üÿÿÿÿ8ïØáù1

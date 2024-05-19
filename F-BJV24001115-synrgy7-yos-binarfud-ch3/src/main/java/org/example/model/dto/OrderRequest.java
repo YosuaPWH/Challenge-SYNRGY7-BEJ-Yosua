@@ -1,21 +1,20 @@
-package org.example.model;
+package org.example.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.model.User;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
-    private UUID uuid;
-    private LocalDateTime time;
-    private String address;
+public class OrderRequest {
     private User user;
-    private Boolean completed;
+    private UUID productId;
+    private int quantity;
+    private String address;
 }
