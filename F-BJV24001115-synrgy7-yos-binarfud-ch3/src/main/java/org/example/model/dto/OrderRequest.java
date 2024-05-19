@@ -15,4 +15,6 @@ import java.util.UUID;
 public class OrderRequest {
     private User user;
     private UUID productId;
+    private int quantity;
+    private String address;
 }

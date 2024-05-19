@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-    private UUID id;
+    private UUID uuid;
     private LocalDateTime time;
     private String address;
     private User user;

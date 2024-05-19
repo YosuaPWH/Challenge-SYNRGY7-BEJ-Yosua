@@ -4,10 +4,7 @@ import org.example.model.User;
 import org.example.model.dto.AddUserRequest;
 import org.example.repository.interfaces.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class UserRepositoryImpl implements UserRepository {
     private static UserRepository userRepository;
@@ -50,11 +47,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getById(UUID uuid) {
+    public Optional<User> getById(UUID uuid) {
         return users.stream()
                 .filter(user -> user.getId().equals(uuid))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override

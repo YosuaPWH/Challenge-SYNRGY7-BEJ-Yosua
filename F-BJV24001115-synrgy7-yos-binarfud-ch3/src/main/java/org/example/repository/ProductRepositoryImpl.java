@@ -5,6 +5,7 @@ import org.example.repository.interfaces.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ProductRepositoryImpl implements ProductRepository {
@@ -31,11 +32,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product getById(UUID uuid) {
+    public Optional<Product> getById(UUID uuid) {
         return products.stream()
                 .filter(product -> product.getId().equals(uuid))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
@@ -48,5 +48,15 @@ public class ProductRepositoryImpl implements ProductRepository {
         return products;
     }
 
+    @Override
+    public boolean update(Product product) {
+        Optional<Product> existingProduct = getById(product.getId());
 
+        if (existingProduct.isEmpty()) {
+            return false;
+        }
+
+        products.set(products.indexOf(existingProduct.get()), product);
+        return true;
+    }
 }

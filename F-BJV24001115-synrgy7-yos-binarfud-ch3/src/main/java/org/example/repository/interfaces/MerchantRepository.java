@@ -4,6 +4,7 @@ import org.example.model.Merchant;
 import org.example.model.dto.AddMerchantRequest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface MerchantRepository {
@@ -20,6 +21,6 @@ public interface MerchantRepository {
 
     // Find all merchant that have the same location in their merchant location
     List<Merchant> findByLocation(String location);
-    Merchant getById(UUID uuid);
+    Optional<Merchant> getById(UUID uuid);
     boolean deleteById(UUID uuid);
 }

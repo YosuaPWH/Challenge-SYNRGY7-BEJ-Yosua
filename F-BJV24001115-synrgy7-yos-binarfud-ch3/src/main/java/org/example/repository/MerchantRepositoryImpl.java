@@ -6,6 +6,7 @@ import org.example.repository.interfaces.MerchantRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MerchantRepositoryImpl implements MerchantRepository {
@@ -67,11 +68,10 @@ public class MerchantRepositoryImpl implements MerchantRepository {
     }
 
     @Override
-    public Merchant getById(UUID uuid) {
+    public Optional<Merchant> getById(UUID uuid) {
         return merchants.stream()
                 .filter(merchant -> merchant.getId().equals(uuid))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override

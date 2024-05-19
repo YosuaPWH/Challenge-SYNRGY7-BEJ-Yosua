@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderService {
-    boolean add(OrderRequest orderRequest);
+    UUID add(OrderRequest orderRequest);
     Optional<Order> findById(UUID uuid);
     boolean deleteById(UUID uuid);
     List<Order> getAll();
