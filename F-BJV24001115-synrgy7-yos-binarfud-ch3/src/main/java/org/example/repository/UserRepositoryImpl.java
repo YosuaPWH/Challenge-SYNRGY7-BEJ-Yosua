@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.model.User;
+import org.example.model.dto.AddUserRequest;
 import org.example.repository.interfaces.UserRepository;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class UserRepositoryImpl implements UserRepository {
     private static UserRepository userRepository;
     private final ArrayList<User> users;
 
-    public UserRepositoryImpl() {
+    private UserRepositoryImpl() {
         this.users = new ArrayList<>();
     }
 
@@ -24,10 +25,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean add(User user) {
-        if (user.getId() == null) {
-            user.setId(UUID.randomUUID());
-        }
+    public boolean add(AddUserRequest addUserRequest) {
+        User user = new User(
+                UUID.randomUUID(),
+                addUserRequest.getUsername(),
+                addUserRequest.getEmail(),
+                addUserRequest.getPassword()
+        );
+
         return users.add(user);
     }
 
@@ -37,10 +42,36 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
-        users.stream()
+    public boolean deleteById(UUID uuid) {
+        if (!isExistByID(uuid)) {
+            throw new IllegalArgumentException("User with id " + uuid + " not found");
+        }
+        return users.removeIf(user -> user.getId().equals(uuid));
+    }
+
+    @Override
+    public User getById(UUID uuid) {
+        return users.stream()
                 .filter(user -> user.getId().equals(uuid))
                 .findFirst()
-                .ifPresent(users::remove);
+                .orElse(null);
+    }
+
+    @Override
+    public boolean isExistByID(UUID uuid) {
+        return users.stream()
+                .anyMatch(user -> user.getId().equals(uuid));
+    }
+
+    @Override
+    public boolean isExistByEmail(String email) {
+        return users.stream()
+                .anyMatch(user -> user.getEmail().equals(email));
+    }
+
+    @Override
+    public boolean isExistByUserName(String userName) {
+        return users.stream()
+                .anyMatch(user -> user.getUsername().equals(userName));
     }
 }

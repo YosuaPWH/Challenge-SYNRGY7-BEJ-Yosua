@@ -1,0 +1,23 @@
+
+¡
+java:S1450
+"^Remove the "merchantService" field and declare it as a local variable in the relevant methods.(‚ËäÎ8ôÆ¨Šù1J$09a940b6-a8f8-4c0b-8f94-a79788620e7e
+ƒ
+java:S1450"aRemove the "orderDetailService" field and declare it as a local variable in the relevant methods.(™€ü¤üÿÿÿÿ8à˜ªŠù1
+}
+java:S1450"[Remove the "orderService" field and declare it as a local variable in the relevant methods.(ãë»ìÿÿÿÿÿ8á˜ªŠù1
+z
+java:S1450"]Remove the "productService" field and declare it as a local variable in the relevant methods.(³’é…8á˜ªŠù1
+|
+java:S1450"ZRemove the "userService" field and declare it as a local variable in the relevant methods.(¶òÁÈùÿÿÿÿ8â˜ªŠù1
+v
+java:S1068
+"3Remove this unused "merchantService" private field.(‚ËäÎ8ÿÕ§Šù1J$7acd873b-a934-400a-ae0f-47ad6eeaffcb
+w
+java:S1068"/Remove this unused "userService" private field.(¶òÁÈùÿÿÿÿ8ÿÕ§Šù1J$9568e633-0e3c-4046-b648-105427879efb
+x
+java:S1068"0Remove this unused "orderService" private field.(ãë»ìÿÿÿÿÿ8ÿÕ§Šù1J$7fdd91bf-343b-4134-87c8-1df8f727260c
+~
+java:S1068"6Remove this unused "orderDetailService" private field.(™€ü¤üÿÿÿÿ8ÿÕ§Šù1J$6fa87a9e-b964-4488-ba23-58e4f79b31bc
+u
+java:S1068"2Remove this unused "productService" private field.(³’é…8€Ö§Šù1J$4832383c-458f-48bb-8734-6b4d578e0515
