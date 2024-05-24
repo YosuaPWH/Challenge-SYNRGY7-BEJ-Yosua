@@ -24,20 +24,20 @@ public class ViewController {
     }
 
     public static void choiceMenu(int choice, Scanner scn, List<Product> products, OrderService orderService) {
-        if (choice == 99) {
-            if (orderService.getAll().isEmpty()) {
-                System.out.println("Anda belum memesan apapun, silahkan pilih makanan terlebih dahulu!");
-                displayMenu(products);
-            } else {
-//                konfirmasiPembayaran();
-            }
-        } else if (choice == 0) {
-            System.exit(0);
-        } else if (choice <= products.size()) {
-            System.out.println("Anda memilih " + products.get(choice - 1).getName());
-        } else {
-            wrongErrorInput(scn, products);
-        }
+//        if (choice == 99) {
+//            if (orderService.getAll().isEmpty()) {
+//                System.out.println("Anda belum memesan apapun, silahkan pilih makanan terlebih dahulu!");
+//                displayMenu(products);
+//            } else {
+////                konfirmasiPembayaran();
+//            }
+//        } else if (choice == 0) {
+//            System.exit(0);
+//        } else if (choice <= products.size()) {
+//            System.out.println("Anda memilih " + products.get(choice - 1).getName());
+//        } else {
+//            wrongErrorInput(scn, products);
+//        }
     }
 
     public static void wrongErrorInput(Scanner scn, List<Product> products) {

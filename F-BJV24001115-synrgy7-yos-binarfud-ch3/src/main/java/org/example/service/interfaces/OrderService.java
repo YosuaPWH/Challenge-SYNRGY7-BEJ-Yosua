@@ -11,7 +11,9 @@ public interface OrderService {
     UUID add(OrderRequest orderRequest);
     Optional<Order> findById(UUID uuid);
     boolean deleteById(UUID uuid);
-    List<Order> getAll();
+
+    List<Order> getAll(UUID userId);
+
     boolean isExist(UUID uuid);
     boolean updateById(UUID uuid, Order order);
 }

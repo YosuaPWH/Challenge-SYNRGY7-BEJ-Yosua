@@ -59,4 +59,9 @@ public class ProductRepositoryImpl implements ProductRepository {
         products.set(products.indexOf(existingProduct.get()), product);
         return true;
     }
+
+    @Override
+    public void clear() {
+        products.clear();
+    }
 }
