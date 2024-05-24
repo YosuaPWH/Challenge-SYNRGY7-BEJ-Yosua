@@ -12,7 +12,7 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
     private static ProductService productService;
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     private ProductServiceImpl() {
         productRepository = ProductRepositoryImpl.getInstance();
@@ -46,16 +46,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean deleteById(UUID uuid) {
-        return false;
+        return productRepository.deleteById(uuid);
     }
 
     @Override
     public boolean isExist(UUID uuid) {
-        return false;
+        return productRepository.getById(uuid).isPresent();
     }
 
     @Override
     public List<Product> getAll() {
         return productRepository.getAll();
+    }
+
+    @Override
+    public void clear() {
+        productRepository.clear();
     }
 }

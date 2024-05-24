@@ -11,4 +11,6 @@ public interface ProductService {
     boolean deleteById(UUID uuid);
     boolean isExist(UUID uuid);
     List<Product> getAll();
+
+    void clear();
 }

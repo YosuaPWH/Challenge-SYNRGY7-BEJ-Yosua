@@ -1,14 +1,9 @@
 package org.example.service;
 
 import org.example.model.Order;
-import org.example.model.User;
 import org.example.model.dto.OrderRequest;
-import org.example.repository.OrderDetailRepositoryImpl;
 import org.example.repository.OrderRepositoryImpl;
-import org.example.repository.UserRepositoryImpl;
-import org.example.repository.interfaces.OrderDetailRepository;
 import org.example.repository.interfaces.OrderRepository;
-import org.example.repository.interfaces.UserRepository;
 import org.example.service.interfaces.OrderService;
 
 import java.time.LocalDateTime;
@@ -18,12 +13,10 @@ import java.util.UUID;
 
 public class OrderServiceImpl implements OrderService {
     private static OrderService orderService;
-    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
     private OrderServiceImpl() {
         orderRepository = OrderRepositoryImpl.getInstance();
-        userRepository = UserRepositoryImpl.getInstance();
     }
 
     public static OrderService getInstance() {
@@ -49,22 +42,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> findById(UUID uuid) {
-        return Optional.empty();
+        return orderRepository.getById(uuid);
     }
 
     @Override
     public boolean deleteById(UUID uuid) {
-        return false;
+        return orderRepository.deleteById(uuid);
     }
 
     @Override
-    public List<Order> getAll() {
-        return null;
+    public List<Order> getAll(UUID userId) {
+        return orderRepository.getAllByUserId(userId);
     }
 
     @Override
     public boolean isExist(UUID uuid) {
-        return false;
+        return orderRepository.getById(uuid).isPresent();
     }
 
     @Override

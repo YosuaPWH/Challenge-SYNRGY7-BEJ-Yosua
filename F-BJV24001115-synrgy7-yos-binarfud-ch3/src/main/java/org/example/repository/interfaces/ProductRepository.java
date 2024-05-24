@@ -12,4 +12,6 @@ public interface ProductRepository {
     boolean deleteById(UUID uuid);
     List<Product> getAll();
     boolean update(Product product);
+
+    void clear();
 }
