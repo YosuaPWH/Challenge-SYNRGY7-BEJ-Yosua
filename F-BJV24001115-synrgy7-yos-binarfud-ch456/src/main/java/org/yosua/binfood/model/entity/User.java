@@ -1,11 +1,16 @@
 package org.yosua.binfood.model.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,7 +20,7 @@ import java.util.UUID;
 @Builder
 @Table(name = "users")
 @SQLRestriction("deleted = false")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -29,11 +34,13 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String token;
 
-    @Column(name = "token_expired_at")
-    private Long tokenExpiredAt;
-
     private boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 }
