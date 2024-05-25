@@ -10,18 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegisterUserMerchantRequest {
-    @NotBlank
-    private String emailAddress;
-
+public class LoginUserRequest {
     @NotBlank
     private String username;
 
     @NotBlank
     private String password;
-
-    @NotBlank
-    private String confirmPassword;
-
-    private String location;
 }

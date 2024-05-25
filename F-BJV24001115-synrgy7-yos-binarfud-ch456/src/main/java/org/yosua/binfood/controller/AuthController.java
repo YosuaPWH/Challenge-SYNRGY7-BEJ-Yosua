@@ -7,13 +7,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.yosua.binfood.model.entity.User;
-import org.yosua.binfood.model.request.LoginUserMerchantRequest;
+import org.yosua.binfood.model.request.LoginUserRequest;
+import org.yosua.binfood.model.request.RegisterUserRequest;
 import org.yosua.binfood.model.response.ApiResponse;
 import org.yosua.binfood.model.response.TokenResponse;
+import org.yosua.binfood.model.response.UserResponse;
 import org.yosua.binfood.services.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -24,11 +26,23 @@ public class AuthController {
     }
 
     @PostMapping(
+            path = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ApiResponse<UserResponse> register(@RequestBody RegisterUserRequest request) {
+        UserResponse userResponse = authService.register(request);
+        return ApiResponse.<UserResponse>builder()
+                .data(userResponse)
+                .build();
+    }
+
+    @PostMapping(
             path = "/login",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResponse<TokenResponse> login(@RequestBody LoginUserMerchantRequest request) {
+    public ApiResponse<TokenResponse> login(@RequestBody LoginUserRequest request) {
         TokenResponse tokenResponse = authService.login(request);
         return ApiResponse.<TokenResponse>builder()
                 .data(tokenResponse)
