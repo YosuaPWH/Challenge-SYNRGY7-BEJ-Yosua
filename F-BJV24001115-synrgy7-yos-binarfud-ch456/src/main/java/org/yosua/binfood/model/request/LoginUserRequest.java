@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LoginUserRequest {
-    @NotBlank
+    @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 }

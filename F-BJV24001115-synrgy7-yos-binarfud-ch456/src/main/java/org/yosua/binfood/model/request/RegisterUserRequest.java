@@ -1,5 +1,7 @@
 package org.yosua.binfood.model.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +13,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RegisterUserRequest {
-    @NotBlank
+    @Email(message = "Email format is incorrect")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Name cannot be empty")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "Confirm password cannot be empty")
+    @JsonProperty("confirm_password")
     private String confirmPassword;
 
     private String location;

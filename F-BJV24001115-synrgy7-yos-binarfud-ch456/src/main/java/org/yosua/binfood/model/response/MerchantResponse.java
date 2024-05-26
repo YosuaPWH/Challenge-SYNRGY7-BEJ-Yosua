@@ -3,14 +3,13 @@ package org.yosua.binfood.model.response;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 import java.util.UUID;
 
 @Builder
 @Data
-public class UserResponse {
+public class MerchantResponse {
     private UUID id;
-    private String emailAddress;
-    private String username;
-    private List<String> roles;
+    private String name;
+    private String location;
+    private boolean open;
 }

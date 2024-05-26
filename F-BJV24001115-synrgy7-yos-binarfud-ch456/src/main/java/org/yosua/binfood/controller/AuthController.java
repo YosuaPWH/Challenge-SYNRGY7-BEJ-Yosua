@@ -6,23 +6,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.yosua.binfood.model.entity.User;
 import org.yosua.binfood.model.request.LoginUserRequest;
 import org.yosua.binfood.model.request.RegisterUserRequest;
 import org.yosua.binfood.model.response.ApiResponse;
-import org.yosua.binfood.model.response.TokenResponse;
+import org.yosua.binfood.model.response.JwtResponse;
 import org.yosua.binfood.model.response.UserResponse;
 import org.yosua.binfood.services.AuthService;
+import org.yosua.binfood.services.LogoutService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
+    private final LogoutService logoutService;
 
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, LogoutService logoutService) {
         this.authService = authService;
+        this.logoutService = logoutService;
     }
 
     @PostMapping(
@@ -33,6 +35,7 @@ public class AuthController {
     public ApiResponse<UserResponse> register(@RequestBody RegisterUserRequest request) {
         UserResponse userResponse = authService.register(request);
         return ApiResponse.<UserResponse>builder()
+                .success(true)
                 .data(userResponse)
                 .build();
     }
@@ -42,9 +45,10 @@ public class AuthController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResponse<TokenResponse> login(@RequestBody LoginUserRequest request) {
-        TokenResponse tokenResponse = authService.login(request);
-        return ApiResponse.<TokenResponse>builder()
+    public ApiResponse<JwtResponse> login(@RequestBody LoginUserRequest request) {
+        JwtResponse tokenResponse = authService.login(request);
+        return ApiResponse.<JwtResponse>builder()
+                .success(true)
                 .data(tokenResponse)
                 .build();
     }
@@ -53,9 +57,9 @@ public class AuthController {
             path = "/logout",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResponse<String> logout(User user) {
-        authService.logout(user);
+    public ApiResponse<String> logout() {
         return ApiResponse.<String>builder()
+                .success(true)
                 .data("Logout success")
                 .build();
     }

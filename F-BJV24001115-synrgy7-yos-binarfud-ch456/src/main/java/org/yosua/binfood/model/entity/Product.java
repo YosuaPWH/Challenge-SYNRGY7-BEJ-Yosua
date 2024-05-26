@@ -5,15 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE merchants SET isActive = false WHERE id = ?")
+@SQLRestriction("isActive = true")
 @Table(name = "products")
 public class Product extends BaseEntity {
 
@@ -29,4 +32,7 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
+
+    @Column
+    private boolean isActive = Boolean.TRUE;
 }
