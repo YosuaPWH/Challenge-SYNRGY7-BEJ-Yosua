@@ -1,10 +1,9 @@
 package org.yosua.binfood.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
+@SQLDelete(sql = "UPDATE merchants SET isActive = false WHERE id = ?")
+@SQLRestriction("isActive = true")
 @Table(name = "merchants")
 public class Merchant extends BaseEntity {
 
@@ -28,4 +30,7 @@ public class Merchant extends BaseEntity {
 
     @OneToMany(mappedBy = "merchant")
     private List<Product> products;
+
+    @Column
+    private boolean isActive = Boolean.TRUE;
 }

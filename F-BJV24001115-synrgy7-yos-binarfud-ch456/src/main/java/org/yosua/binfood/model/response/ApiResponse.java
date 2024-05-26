@@ -8,6 +8,8 @@ import lombok.Data;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
+    private boolean success;
     private T data;
+    private String message;
     private String errors;
 }

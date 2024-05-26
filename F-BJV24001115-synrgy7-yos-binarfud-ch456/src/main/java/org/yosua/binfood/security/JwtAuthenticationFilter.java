@@ -23,17 +23,14 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    @Qualifier("handlerExceptionResolver")
-    @Autowired
-    private HandlerExceptionResolver resolver;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailService;
 
     @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private UserDetailsService userDetailService;
-
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailService) {
+        this.jwtService = jwtService;
+        this.userDetailService = userDetailService;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -42,9 +39,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         String jwt = parseJwt(request);
-        String username = jwtService.getUsername(jwt);
 
-        try {
+        if (jwt != null) {
+            String username = jwtService.getUsername(jwt);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (username != null && authentication == null) {
@@ -62,10 +59,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
 
-            filterChain.doFilter(request, response);
-        } catch (Exception e) {
-            resolver.resolveException(request, response, null, e);
         }
+        filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
