@@ -77,7 +77,7 @@ public class MerchantController {
         merchantService.delete(id);
         return ApiResponse.<String>builder()
                 .success(true)
-                .data("Merchant deleted")
+                .message("Merchant deleted")
                 .build();
     }
 }

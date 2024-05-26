@@ -73,7 +73,7 @@ public class MerchantService {
 
     public MerchantResponse getById(String id) {
         Merchant merchant = merchantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.MERCHANT_NOT_FOUND_MESSAGE(id)));
+                .orElseThrow(() -> new IllegalArgumentException(Constants.merchantNotFoundMessage(id)));
 
         return MerchantResponse.builder()
                 .id(merchant.getId())
@@ -85,7 +85,7 @@ public class MerchantService {
 
     public MerchantResponse updateStatus(String id) {
         Merchant merchant = merchantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.MERCHANT_NOT_FOUND_MESSAGE(id)));
+                .orElseThrow(() -> new IllegalArgumentException(Constants.merchantNotFoundMessage(id)));
 
         merchant.setOpen(!merchant.isOpen());
         merchantRepository.save(merchant);
@@ -100,7 +100,7 @@ public class MerchantService {
 
     public MerchantResponse update(String id, MerchantRequest request) {
         Merchant merchant = merchantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.MERCHANT_NOT_FOUND_MESSAGE(id)));
+                .orElseThrow(() -> new IllegalArgumentException(Constants.merchantNotFoundMessage(id)));
 
         if (merchantRepository.existsByName(request.getName()) && !merchant.getName().equals(request.getName())) {
             throw new IllegalArgumentException("Merchant with name " + request.getName() + " already exists");
@@ -120,7 +120,7 @@ public class MerchantService {
 
     public void delete(String id) {
         if (!merchantRepository.existsById(id)) {
-            throw new IllegalArgumentException(Constants.MERCHANT_NOT_FOUND_MESSAGE(id));
+            throw new IllegalArgumentException(Constants.merchantNotFoundMessage(id));
         }
 
         productRepository.deleteAllByMerchantId(UUID.fromString(id));
