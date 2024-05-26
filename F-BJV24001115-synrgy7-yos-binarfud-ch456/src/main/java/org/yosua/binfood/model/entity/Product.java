@@ -1,10 +1,7 @@
 package org.yosua.binfood.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @SQLDelete(sql = "UPDATE merchants SET isActive = false WHERE id = ?")
 @SQLRestriction("isActive = true")
 @Table(name = "products")

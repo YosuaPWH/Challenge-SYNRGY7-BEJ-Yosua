@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
     void deleteAllByMerchantId(UUID merchantId);
+
+    boolean existsByName(String name);
 }
