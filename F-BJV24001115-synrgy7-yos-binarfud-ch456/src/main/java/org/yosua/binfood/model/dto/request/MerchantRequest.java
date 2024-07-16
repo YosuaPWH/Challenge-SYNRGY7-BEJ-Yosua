@@ -1,4 +1,4 @@
-package org.yosua.binfood.model.request;
+package org.yosua.binfood.model.dto.request;
 
 import lombok.*;
 

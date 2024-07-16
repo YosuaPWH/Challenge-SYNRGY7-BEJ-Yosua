@@ -20,25 +20,26 @@ import java.util.List;
 @Entity
 @Builder
 @SQLDelete(sql = "UPDATE users SET isActive = false WHERE id = ?")
-@SQLRestriction("isActive = true")
+@SQLRestriction("is_active = true")
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(unique = true, nullable = false)
-    private String emailAddress;
-
     @Column(nullable = false)
+    private String fullName;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column
-    private String token;
+    @Column(name = "is_active")
+    private boolean isActive;
 
-    @Column
-    private boolean isActive = Boolean.TRUE;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthenticationProvider authenticationProvider;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
@@ -58,5 +59,10 @@ public class User extends BaseEntity implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }

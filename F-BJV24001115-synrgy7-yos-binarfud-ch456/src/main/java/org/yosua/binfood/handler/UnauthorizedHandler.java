@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.yosua.binfood.model.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.ApiResponse;
 
 import java.io.IOException;
 

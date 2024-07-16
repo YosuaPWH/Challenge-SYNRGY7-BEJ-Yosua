@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Builder
 @SQLDelete(sql = "UPDATE merchants SET isActive = false WHERE id = ?")
-@SQLRestriction("isActive = true")
+@SQLRestriction("is_active = true")
 @Table(name = "products")
 public class Product extends BaseEntity {
 
@@ -31,6 +31,6 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
 
-    @Column
+    @Column(name = "is_active")
     private boolean isActive = Boolean.TRUE;
 }

@@ -1,4 +1,4 @@
-package org.yosua.binfood.model.request;
+package org.yosua.binfood.model.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -10,5 +10,5 @@ import lombok.*;
 @Builder
 public class UpdateUserRequest {
     @NotBlank
-    private String username;
+    private String fullName;
 }
