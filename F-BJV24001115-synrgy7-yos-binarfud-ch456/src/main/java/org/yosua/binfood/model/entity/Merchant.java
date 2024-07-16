@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity
 @Builder
 @SQLDelete(sql = "UPDATE merchants SET isActive = false WHERE id = ?")
-@SQLRestriction("isActive = true")
+@SQLRestriction("is_active = true")
 @Table(name = "merchants")
 public class Merchant extends BaseEntity {
 
@@ -31,6 +31,6 @@ public class Merchant extends BaseEntity {
     @OneToMany(mappedBy = "merchant")
     private List<Product> products;
 
-    @Column
+    @Column(name = "is_active")
     private boolean isActive = Boolean.TRUE;
 }

@@ -1,4 +1,4 @@
-package org.yosua.binfood.model.request;
+package org.yosua.binfood.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -10,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ChangePasswordRequest {
-    @NotBlank
+    @NotBlank(message = "Current password cannot be empty")
     @JsonProperty("current_password")
     private String currentPassword;
 
-    @NotBlank
+    @NotBlank(message = "New password cannot be empty")
     @JsonProperty("new_password")
     private String newPassword;
 }

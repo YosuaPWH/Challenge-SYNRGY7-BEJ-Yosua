@@ -7,6 +7,8 @@ public class Constants {
     public static final String UPDATE_USER_FAILED = "User update failed";
     public static final String GET_AUTHENTICATED_USER_FAILED = "Failed to get authenticated user";
     public static final String GET_AUTHENTICATED_USER_SUCCESS = "Successfully get authenticated user";
+    public static final String DELETE_USER_SUCCESS = "User deleted successfully";
+
     public static String merchantNotFoundMessage(String id) {
         return "Merchant with id " + id + " not found";
     }

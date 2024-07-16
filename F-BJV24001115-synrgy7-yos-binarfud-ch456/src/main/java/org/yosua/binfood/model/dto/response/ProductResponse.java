@@ -1,4 +1,4 @@
-package org.yosua.binfood.model.response;
+package org.yosua.binfood.model.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

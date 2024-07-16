@@ -2,29 +2,27 @@ package org.yosua.binfood.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.yosua.binfood.model.request.LoginUserRequest;
-import org.yosua.binfood.model.request.RegisterUserRequest;
-import org.yosua.binfood.model.response.ApiResponse;
-import org.yosua.binfood.model.response.JwtResponse;
-import org.yosua.binfood.model.response.UserResponse;
+import org.springframework.web.bind.annotation.*;
+import org.yosua.binfood.model.dto.request.LoginUserRequest;
+import org.yosua.binfood.model.dto.request.RefreshTokenRequest;
+import org.yosua.binfood.model.dto.request.RegisterUserRequest;
+import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.JwtResponse;
+import org.yosua.binfood.model.dto.response.UserResponse;
 import org.yosua.binfood.services.AuthService;
-import org.yosua.binfood.services.LogoutService;
+import org.yosua.binfood.services.TokenService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
-    private final LogoutService logoutService;
+    private final TokenService refreshTokenService;
 
     @Autowired
-    public AuthController(AuthService authService, LogoutService logoutService) {
+    public AuthController(AuthService authService, TokenService refreshTokenService) {
         this.authService = authService;
-        this.logoutService = logoutService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping(
@@ -62,6 +60,20 @@ public class AuthController {
                 .success(true)
                 .data("Logout success")
                 .build();
+    }
+
+    @PostMapping("/refreshToken")
+    public ApiResponse<JwtResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        JwtResponse tokenResponse = refreshTokenService.refreshToken(request);
+        return ApiResponse.<JwtResponse>builder()
+                .success(true)
+                .data(tokenResponse)
+                .build();
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Hello World";
     }
 
 }

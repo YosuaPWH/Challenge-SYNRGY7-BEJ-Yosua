@@ -3,16 +3,12 @@ package org.yosua.binfood.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.yosua.binfood.model.entity.User;
-import org.yosua.binfood.model.request.ChangePasswordRequest;
-import org.yosua.binfood.model.request.UpdateUserRequest;
-import org.yosua.binfood.model.response.ApiResponse;
-import org.yosua.binfood.model.response.UserResponse;
-import org.yosua.binfood.services.UserService;
+import org.springframework.web.bind.annotation.*;
+import org.yosua.binfood.model.dto.request.ChangePasswordRequest;
+import org.yosua.binfood.model.dto.request.UpdateUserRequest;
+import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.UserResponse;
+import org.yosua.binfood.services.impl.UserServiceImpl;
 import org.yosua.binfood.utils.Constants;
 
 @RestController
@@ -20,10 +16,10 @@ import org.yosua.binfood.utils.Constants;
 @PreAuthorize("hasRole('USER')")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -65,6 +61,19 @@ public class UserController {
                 .success(true)
                 .data(null)
                 .message(Constants.CHANGE_PASSWORD_SUCCESS)
+                .build();
+    }
+
+    @DeleteMapping(
+            path = "/delete/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ApiResponse<String> delete(@PathVariable("id") String id) {
+        userService.delete(id);
+        return ApiResponse.<String>builder()
+                .success(true)
+                .data(null)
+                .message(Constants.DELETE_USER_SUCCESS)
                 .build();
     }
 }

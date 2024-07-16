@@ -1,13 +1,12 @@
 package org.yosua.binfood.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.yosua.binfood.model.request.MerchantRequest;
-import org.yosua.binfood.model.response.ApiResponse;
-import org.yosua.binfood.model.response.MerchantResponse;
-import org.yosua.binfood.services.MerchantService;
+import org.yosua.binfood.model.dto.request.MerchantRequest;
+import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.MerchantResponse;
+import org.yosua.binfood.services.impl.MerchantServiceImpl;
 
 import java.util.List;
 
@@ -16,10 +15,10 @@ import java.util.List;
 @PreAuthorize("hasRole('MERCHANT')")
 public class MerchantController {
 
-    private final MerchantService merchantService;
+    private final MerchantServiceImpl merchantService;
 
     @Autowired
-    public MerchantController(MerchantService merchantService) {
+    public MerchantController(MerchantServiceImpl merchantService) {
         this.merchantService = merchantService;
     }
 

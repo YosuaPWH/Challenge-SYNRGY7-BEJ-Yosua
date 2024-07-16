@@ -1,5 +1,6 @@
 package org.yosua.binfood.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,15 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.yosua.binfood.handler.UnauthenticatedHandler;
-import org.yosua.binfood.handler.UnauthorizedHandler;
+import org.yosua.binfood.handler.OAuth2LoginSuccessHandler;
 
 import java.util.List;
 
@@ -29,44 +28,59 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final LogoutHandler logoutHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Autowired
     public SecurityConfig(
             AuthenticationProvider authenticationProvider,
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            LogoutHandler logoutHandler
+            LogoutHandler logoutHandler,
+            OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler
     ) {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.logoutHandler = logoutHandler;
+        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(httpSecurityCorsConfigurer ->
+                        httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource())
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(auth -> auth
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/oauth2/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll()
+                        .requestMatchers("/auth/test").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/merchant/**").hasRole("MERCHANT")
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint(new UnauthenticatedHandler())
-                        .accessDeniedHandler(new UnauthorizedHandler())
-                );
-        http.authenticationProvider(authenticationProvider);
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .exceptionHandling(e -> e
+//                        .authenticationEntryPoint(new UnauthenticatedHandler())
+//                        .accessDeniedHandler(new UnauthorizedHandler())
+//                )
+                .formLogin(Customizer.withDefaults())
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler(
-                                (request, response, authentication) -> SecurityContextHolder.clearContext()
+                                (request, response, authentication) -> {
+                                    SecurityContextHolder.clearContext();
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                }
                         )
                 );
-
         return http.build();
     }
 

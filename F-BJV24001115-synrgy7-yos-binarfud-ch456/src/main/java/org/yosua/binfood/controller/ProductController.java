@@ -3,10 +3,10 @@ package org.yosua.binfood.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.yosua.binfood.model.request.ProductRequest;
-import org.yosua.binfood.model.response.ApiResponse;
-import org.yosua.binfood.model.response.ProductResponse;
-import org.yosua.binfood.services.ProductService;
+import org.yosua.binfood.model.dto.request.ProductRequest;
+import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.ProductResponse;
+import org.yosua.binfood.services.impl.ProductServiceImpl;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import java.util.List;
 @PreAuthorize("hasAnyRole('USER', 'MERCHANT')")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductServiceImpl productService) {
         this.productService = productService;
     }
 
@@ -28,6 +28,19 @@ public class ProductController {
         return ApiResponse.<List<ProductResponse>>builder()
                 .success(true)
                 .data(allProduct)
+                .build();
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<List<ProductResponse>> search(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Double priceGreater,
+            @RequestParam(required = false) Double priceLess
+    ) {
+        List<ProductResponse> products = productService.getAll(name, priceGreater, priceLess);
+        return ApiResponse.<List<ProductResponse>>builder()
+                .success(true)
+                .data(products)
                 .build();
     }
 
