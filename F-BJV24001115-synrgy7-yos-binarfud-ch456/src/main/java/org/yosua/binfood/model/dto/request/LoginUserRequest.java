@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginUserRequest {
     @NotBlank(message = "Email cannot be empty")
-    @JsonProperty("email")
     private String email;
 
     @NotBlank(message = "Password cannot be empty")

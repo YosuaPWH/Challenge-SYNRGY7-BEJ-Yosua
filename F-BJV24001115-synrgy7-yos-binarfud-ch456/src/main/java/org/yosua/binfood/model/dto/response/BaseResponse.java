@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResponse<T> {
+public class BaseResponse<T> {
     private boolean success;
     private T data;
     private String message;

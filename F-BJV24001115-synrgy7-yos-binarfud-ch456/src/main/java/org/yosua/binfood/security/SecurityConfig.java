@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.yosua.binfood.handler.OAuth2LoginSuccessHandler;
+import org.yosua.binfood.handler.oauth2.OAuth2LoginSuccessHandler;
 
 import java.util.List;
 
@@ -55,11 +55,19 @@ public class SecurityConfig {
                         .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/oauth2/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll()
-                        .requestMatchers("/auth/test").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/oauth2/**",
+                                "/auth/login",
+                                "/auth/register",
+                                "/auth/refresh-token",
+                                "/auth/test"
+                        ).permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/merchant/**").hasRole("MERCHANT")
                         .anyRequest().authenticated()
@@ -87,7 +95,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedMethods(List.of("GET", "POST"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

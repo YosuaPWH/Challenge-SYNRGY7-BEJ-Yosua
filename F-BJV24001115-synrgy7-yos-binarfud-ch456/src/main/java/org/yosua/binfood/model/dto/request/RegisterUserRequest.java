@@ -24,9 +24,5 @@ public class RegisterUserRequest {
     @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @NotBlank(message = "Confirm password cannot be empty")
-    @JsonProperty("confirm_password")
-    private String confirmPassword;
-
     private String location;
 }

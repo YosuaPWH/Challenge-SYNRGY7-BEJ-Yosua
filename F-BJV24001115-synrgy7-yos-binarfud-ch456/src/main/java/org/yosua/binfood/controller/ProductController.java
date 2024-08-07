@@ -1,10 +1,13 @@
 package org.yosua.binfood.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosua.binfood.model.dto.request.ProductRequest;
-import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.BaseResponse;
 import org.yosua.binfood.model.dto.response.ProductResponse;
 import org.yosua.binfood.services.impl.ProductServiceImpl;
 
@@ -23,60 +26,78 @@ public class ProductController {
     }
 
     @GetMapping
-    public ApiResponse<List<ProductResponse>> getAll() {
+    public ResponseEntity<BaseResponse<List<ProductResponse>>> getAll() {
         List<ProductResponse> allProduct = productService.getAll();
-        return ApiResponse.<List<ProductResponse>>builder()
+
+        BaseResponse<List<ProductResponse>> response = BaseResponse.<List<ProductResponse>>builder()
                 .success(true)
                 .data(allProduct)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/search")
-    public ApiResponse<List<ProductResponse>> search(
+    public ResponseEntity<BaseResponse<List<ProductResponse>>> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double priceGreater,
             @RequestParam(required = false) Double priceLess
     ) {
         List<ProductResponse> products = productService.getAll(name, priceGreater, priceLess);
-        return ApiResponse.<List<ProductResponse>>builder()
+
+        BaseResponse<List<ProductResponse>> response = BaseResponse.<List<ProductResponse>>builder()
                 .success(true)
                 .data(products)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<ProductResponse> getById(@PathVariable String id) {
+    public ResponseEntity<BaseResponse<ProductResponse>> getById(@PathVariable String id) {
         ProductResponse product = productService.getById(id);
-        return ApiResponse.<ProductResponse>builder()
+
+        BaseResponse<ProductResponse> response = BaseResponse.<ProductResponse>builder()
                 .success(true)
                 .data(product)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public ApiResponse<ProductResponse> create(@RequestBody ProductRequest request) {
+    public ResponseEntity<BaseResponse<ProductResponse>> create(@Valid @RequestBody ProductRequest request) {
         ProductResponse product = productService.create(request);
-        return ApiResponse.<ProductResponse>builder()
+
+        BaseResponse<ProductResponse> response = BaseResponse.<ProductResponse>builder()
                 .success(true)
                 .data(product)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ProductResponse> update(@PathVariable String id, @RequestBody ProductRequest request) {
+    public ResponseEntity<BaseResponse<ProductResponse>> update(@PathVariable String id, @Valid @RequestBody ProductRequest request) {
         ProductResponse product = productService.update(id, request);
-        return ApiResponse.<ProductResponse>builder()
+
+        BaseResponse<ProductResponse> response = BaseResponse.<ProductResponse>builder()
                 .success(true)
                 .data(product)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<String> delete(@PathVariable String id) {
+    public ResponseEntity<BaseResponse<String>> delete(@PathVariable String id) {
         productService.delete(id);
-        return ApiResponse.<String>builder()
+
+        BaseResponse<String> response = BaseResponse.<String>builder()
                 .success(true)
                 .message("Product deleted")
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

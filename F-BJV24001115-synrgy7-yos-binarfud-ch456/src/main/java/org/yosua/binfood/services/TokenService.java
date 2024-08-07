@@ -10,6 +10,7 @@ public interface TokenService {
     Token createToken(String email, String jwtToken, String refreshToken);
     boolean existsByUserId(UUID uuid);
     void deleteByUserId(UUID uuid);
+    void deleteByJwtToken(String jwtToken);
     Token verifyExpirationRefreshToken(Token token);
     JwtResponse refreshToken(RefreshTokenRequest request);
     String createRefreshToken();

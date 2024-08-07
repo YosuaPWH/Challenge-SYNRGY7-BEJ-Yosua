@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.BaseResponse;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class UnauthenticatedHandler implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+        BaseResponse<String> apiResponse = BaseResponse.<String>builder()
                 .success(false)
                 .data(null)
                 .errors("Access Denied")
