@@ -42,7 +42,13 @@ public class User extends BaseEntity implements UserDetails {
     private AuthenticationProvider authenticationProvider;
 
     @OneToMany(mappedBy = "user")
+    private List<Merchant> merchants;
+
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

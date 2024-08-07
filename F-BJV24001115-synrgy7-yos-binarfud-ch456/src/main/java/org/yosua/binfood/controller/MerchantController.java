@@ -1,10 +1,13 @@
 package org.yosua.binfood.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosua.binfood.model.dto.request.MerchantRequest;
-import org.yosua.binfood.model.dto.response.ApiResponse;
+import org.yosua.binfood.model.dto.response.BaseResponse;
 import org.yosua.binfood.model.dto.response.MerchantResponse;
 import org.yosua.binfood.services.impl.MerchantServiceImpl;
 
@@ -23,60 +26,78 @@ public class MerchantController {
     }
 
     @PostMapping
-    public ApiResponse<MerchantResponse> create(@RequestBody MerchantRequest request) {
+    public ResponseEntity<BaseResponse<MerchantResponse>> create(@Valid @RequestBody MerchantRequest request) {
         MerchantResponse merchantResponse = merchantService.create(request);
-        return ApiResponse.<MerchantResponse>builder()
+
+        BaseResponse<MerchantResponse> response = BaseResponse.<MerchantResponse>builder()
                 .success(true)
                 .data(merchantResponse)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/search")
-    public ApiResponse<List<MerchantResponse>> search(
+    public ResponseEntity<BaseResponse<List<MerchantResponse>>> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String location,
             @RequestParam(required = false) Boolean open
     ) {
         List<MerchantResponse> merchantResponses = merchantService.getAll(name, location, open);
-        return ApiResponse.<List<MerchantResponse>>builder()
+
+        BaseResponse<List<MerchantResponse>> response = BaseResponse.<List<MerchantResponse>>builder()
                 .success(true)
                 .data(merchantResponses)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<MerchantResponse> get(@PathVariable String id) {
+    public ResponseEntity<BaseResponse<MerchantResponse>> get(@PathVariable String id) {
         MerchantResponse merchantResponse = merchantService.getById(id);
-        return ApiResponse.<MerchantResponse>builder()
+
+        BaseResponse<MerchantResponse> response = BaseResponse.<MerchantResponse>builder()
                 .success(true)
                 .data(merchantResponse)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MerchantResponse> update(@PathVariable String id, @RequestBody MerchantRequest request) {
+    public ResponseEntity<BaseResponse<MerchantResponse>> update(@PathVariable String id, @Valid @RequestBody MerchantRequest request) {
         MerchantResponse merchantResponse = merchantService.update(id, request);
-        return ApiResponse.<MerchantResponse>builder()
+
+        BaseResponse<MerchantResponse> response = BaseResponse.<MerchantResponse>builder()
                 .success(true)
                 .data(merchantResponse)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/status")
-    public ApiResponse<MerchantResponse> updateStatus(@PathVariable String id) {
+    public ResponseEntity<BaseResponse<MerchantResponse>> updateStatus(@PathVariable String id) {
         MerchantResponse merchantResponse = merchantService.updateStatus(id);
-        return ApiResponse.<MerchantResponse>builder()
+
+        BaseResponse<MerchantResponse> response = BaseResponse.<MerchantResponse>builder()
                 .success(true)
                 .data(merchantResponse)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<String> delete(@PathVariable String id) {
+    public ResponseEntity<BaseResponse<String>> delete(@PathVariable String id) {
         merchantService.delete(id);
-        return ApiResponse.<String>builder()
+
+        BaseResponse<String> response = BaseResponse.<String>builder()
                 .success(true)
                 .message("Merchant deleted")
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

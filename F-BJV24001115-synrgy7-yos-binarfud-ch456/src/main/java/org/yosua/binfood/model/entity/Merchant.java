@@ -33,4 +33,8 @@ public class Merchant extends BaseEntity {
 
     @Column(name = "is_active")
     private boolean isActive = Boolean.TRUE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

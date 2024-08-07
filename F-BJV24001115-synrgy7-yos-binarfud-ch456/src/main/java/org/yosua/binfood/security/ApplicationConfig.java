@@ -21,7 +21,6 @@ public class ApplicationConfig {
         this.userDetailsService = userDetailsService;
     }
 
-
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

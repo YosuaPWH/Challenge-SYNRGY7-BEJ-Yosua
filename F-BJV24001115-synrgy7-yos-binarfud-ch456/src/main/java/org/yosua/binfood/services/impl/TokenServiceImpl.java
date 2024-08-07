@@ -70,6 +70,11 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    public void deleteByJwtToken(String jwtToken) {
+        tokenRepository.deleteByJwtToken(jwtToken);
+    }
+
+    @Override
     public Token verifyExpirationRefreshToken(Token token) {
         if (token.getExpiryDateRefreshToken().before(new Date())) {
             tokenRepository.delete(token);

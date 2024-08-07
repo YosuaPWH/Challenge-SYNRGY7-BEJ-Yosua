@@ -6,12 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.yosua.binfood.exception.ResourceNotFoundException;
 import org.yosua.binfood.model.entity.AuthenticationProvider;
 import org.yosua.binfood.model.entity.Role;
 import org.yosua.binfood.model.entity.User;
@@ -24,7 +25,6 @@ import org.yosua.binfood.repositories.UserRepository;
 import org.yosua.binfood.services.AuthService;
 import org.yosua.binfood.services.JwtService;
 import org.yosua.binfood.services.TokenService;
-import org.yosua.binfood.services.ValidationService;
 import org.yosua.binfood.utils.Roles;
 
 import java.util.*;
@@ -33,7 +33,6 @@ import java.util.*;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final ValidationService validationService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -43,7 +42,6 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     public AuthServiceImpl(
             UserRepository userRepository,
-            ValidationService validationService,
             AuthenticationManager authenticationManager,
             JwtService jwtService,
             PasswordEncoder passwordEncoder,
@@ -51,7 +49,6 @@ public class AuthServiceImpl implements AuthService {
             TokenService tokenService
     ) {
         this.userRepository = userRepository;
-        this.validationService = validationService;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
@@ -62,12 +59,6 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public UserResponse register(RegisterUserRequest request) {
-        validationService.validate(request);
-
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password and confirm password must be the same");
-        }
-
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already registered");
         }
@@ -92,9 +83,6 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public JwtResponse login(LoginUserRequest request) {
-        // Validate the request
-        validationService.validate(request);
-
         // Check if the user exists in the database
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password wrong"));
@@ -119,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse registerOAuth2User(DefaultOAuth2User oAuth2User) {
+    public UserResponse registerOAuth2User(OAuth2User oAuth2User) {
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
 
@@ -129,7 +117,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public JwtResponse loginOAuth2User(DefaultOAuth2User oAuth2User) {
+    public JwtResponse loginOAuth2User(OAuth2User oAuth2User) {
         String email = oAuth2User.getAttribute("email");
 
         User user = userRepository.findByEmail(email)
@@ -145,7 +133,7 @@ public class AuthServiceImpl implements AuthService {
     private User createAndSaveUser(String fullName, String email, String password, AuthenticationProvider authenticationProvider) {
         String role = String.valueOf(Roles.ROLE_USER);
         Role userRole = roleRepository.findByName(role)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
         List<Role> authorities = new ArrayList<>();
         authorities.add(userRole);

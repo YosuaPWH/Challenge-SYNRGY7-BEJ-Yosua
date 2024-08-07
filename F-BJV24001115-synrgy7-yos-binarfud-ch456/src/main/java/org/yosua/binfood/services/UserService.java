@@ -1,7 +1,6 @@
 package org.yosua.binfood.services;
 
 import org.yosua.binfood.model.dto.request.ChangePasswordRequest;
-import org.yosua.binfood.model.dto.request.UpdateUserRequest;
 import org.yosua.binfood.model.dto.response.UserResponse;
 import org.yosua.binfood.model.entity.User;
 

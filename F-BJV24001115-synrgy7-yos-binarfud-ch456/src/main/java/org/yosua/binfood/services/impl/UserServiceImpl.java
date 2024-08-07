@@ -10,14 +10,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.yosua.binfood.exception.ResourceNotFoundException;
 import org.yosua.binfood.model.entity.Role;
 import org.yosua.binfood.model.entity.User;
 import org.yosua.binfood.model.dto.request.ChangePasswordRequest;
-import org.yosua.binfood.model.dto.request.UpdateUserRequest;
 import org.yosua.binfood.model.dto.response.UserResponse;
 import org.yosua.binfood.repositories.UserRepository;
 import org.yosua.binfood.services.UserService;
-import org.yosua.binfood.services.ValidationService;
 
 import java.util.Optional;
 
@@ -25,18 +24,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
-    private final ValidationService validationService;
     private final PasswordEncoder passwordEncoder;
 
     @Lazy
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
-            ValidationService validationService,
             PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
-        this.validationService = validationService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -64,8 +60,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public void changePassword(ChangePasswordRequest request) {
-        validationService.validate(request);
-
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), currentUser.getPassword())) {
@@ -80,7 +74,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void delete(String id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         userRepository.delete(user);
 //            User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

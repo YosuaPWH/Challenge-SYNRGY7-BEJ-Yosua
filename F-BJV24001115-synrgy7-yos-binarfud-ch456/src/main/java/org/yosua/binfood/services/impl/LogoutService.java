@@ -1,4 +1,4 @@
-package org.yosua.binfood.handler;
+package org.yosua.binfood.services.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
-import org.yosua.binfood.repositories.TokenRepository;
+import org.yosua.binfood.services.TokenService;
 
 @Service
-public class LogoutSuccessHandler implements LogoutHandler {
+public class LogoutService implements LogoutHandler {
 
-    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
 
     @Autowired
-    public LogoutSuccessHandler(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
+    public LogoutService(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class LogoutSuccessHandler implements LogoutHandler {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
 
-            tokenRepository.deleteByJwtToken(jwt);
+            tokenService.deleteByJwtToken(jwt);
         }
     }
 }
