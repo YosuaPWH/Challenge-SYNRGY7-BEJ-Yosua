@@ -1,6 +1,9 @@
 package org.yosua.binfood.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.yosua.binfood.model.entity.Merchant;
@@ -47,19 +50,19 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public List<MerchantResponse> getAll(String nameFilter, String locationFilter, Boolean openFilter) {
+    public Page<MerchantResponse> getAll(String nameFilter, String locationFilter, Boolean openFilter, int page, int size) {
         Specification<Merchant> spec = getMerchantSpecification(nameFilter, locationFilter, openFilter);
 
-        List<Merchant> merchants = merchantRepository.findAll(spec);
+        Pageable pageable = PageRequest.of(page, size);
 
-        return merchants.stream()
-                .map(merchant -> MerchantResponse.builder()
-                        .id(merchant.getId())
-                        .name(merchant.getName())
-                        .location(merchant.getLocation())
-                        .open(merchant.isOpen())
-                        .build())
-                .toList();
+        Page<Merchant> merchants = merchantRepository.findAll(spec, pageable);
+
+        return merchants.map(merchant -> MerchantResponse.builder()
+                .id(merchant.getId())
+                .name(merchant.getName())
+                .location(merchant.getLocation())
+                .open(merchant.isOpen())
+                .build());
     }
 
     private static Specification<Merchant> getMerchantSpecification(String nameFilter, String locationFilter, Boolean openFilter) {

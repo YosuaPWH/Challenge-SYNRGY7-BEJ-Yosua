@@ -51,11 +51,12 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2Login(auth -> auth
-                        .successHandler(oAuth2LoginSuccessHandler)
-                )
+//                .oauth2Login(auth -> auth
+//                        .successHandler(oAuth2LoginSuccessHandler)
+//                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/",
                                 "/swagger-ui.html",
                                 "/swagger-resources",
                                 "/swagger-resources/**",
@@ -76,7 +77,7 @@ public class SecurityConfig {
 //                        .authenticationEntryPoint(new UnauthenticatedHandler())
 //                        .accessDeniedHandler(new UnauthorizedHandler())
 //                )
-                .formLogin(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout

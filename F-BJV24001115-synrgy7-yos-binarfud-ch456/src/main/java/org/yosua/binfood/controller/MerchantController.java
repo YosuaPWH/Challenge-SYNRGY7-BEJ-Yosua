@@ -2,6 +2,7 @@ package org.yosua.binfood.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,14 +39,16 @@ public class MerchantController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<BaseResponse<List<MerchantResponse>>> search(
+    public ResponseEntity<BaseResponse<Page<MerchantResponse>>> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String location,
-            @RequestParam(required = false) Boolean open
+            @RequestParam(required = false) Boolean open,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        List<MerchantResponse> merchantResponses = merchantService.getAll(name, location, open);
+        Page<MerchantResponse> merchantResponses = merchantService.getAll(name, location, open, page, size);
 
-        BaseResponse<List<MerchantResponse>> response = BaseResponse.<List<MerchantResponse>>builder()
+        BaseResponse<Page<MerchantResponse>> response = BaseResponse.<Page<MerchantResponse>>builder()
                 .success(true)
                 .data(merchantResponses)
                 .build();
