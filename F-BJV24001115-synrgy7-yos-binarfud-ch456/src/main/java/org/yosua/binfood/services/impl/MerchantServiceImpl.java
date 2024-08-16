@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.yosua.binfood.model.entity.Merchant;
@@ -50,10 +51,18 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Page<MerchantResponse> getAll(String nameFilter, String locationFilter, Boolean openFilter, int page, int size) {
+    public Page<MerchantResponse> getAll(
+            String nameFilter,
+            String locationFilter,
+            Boolean openFilter,
+            int page,
+            int size,
+            String sortDirection
+    ) {
         Specification<Merchant> spec = getMerchantSpecification(nameFilter, locationFilter, openFilter);
 
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sort = getSort(nameFilter, locationFilter, sortDirection);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Merchant> merchants = merchantRepository.findAll(spec, pageable);
 
@@ -65,7 +74,7 @@ public class MerchantServiceImpl implements MerchantService {
                 .build());
     }
 
-    private static Specification<Merchant> getMerchantSpecification(String nameFilter, String locationFilter, Boolean openFilter) {
+    private Specification<Merchant> getMerchantSpecification(String nameFilter, String locationFilter, Boolean openFilter) {
         Specification<Merchant> spec = Specification.where(null);
 
         if (nameFilter != null && !nameFilter.isBlank()) {
@@ -80,6 +89,18 @@ public class MerchantServiceImpl implements MerchantService {
             spec = spec.and(MerchantSpecification.isOpen(openFilter));
         }
         return spec;
+    }
+
+    private Sort getSort(String nameFilter, String locationFilter, String sortDirection) {
+        Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        if (nameFilter != null && !nameFilter.isBlank()) {
+            return Sort.by(direction, "name");
+        } else if (locationFilter != null && !locationFilter.isBlank()) {
+            return Sort.by(direction, "location");
+        } else {
+            return Sort.by(direction, "id");
+        }
     }
 
     @Override

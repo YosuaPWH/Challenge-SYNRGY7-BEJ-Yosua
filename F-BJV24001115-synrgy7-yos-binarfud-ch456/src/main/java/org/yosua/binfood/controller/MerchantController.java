@@ -44,9 +44,10 @@ public class MerchantController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) Boolean open,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "asc") String sortDirection
     ) {
-        Page<MerchantResponse> merchantResponses = merchantService.getAll(name, location, open, page, size);
+        Page<MerchantResponse> merchantResponses = merchantService.getAll(name, location, open, page, size, sortDirection);
 
         BaseResponse<Page<MerchantResponse>> response = BaseResponse.<Page<MerchantResponse>>builder()
                 .success(true)
